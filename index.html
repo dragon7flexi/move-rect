@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #333333;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #000;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Rectangle {
+            constructor(topLeftX, topLeftY, width, height, speed) {
+                this.topLeftX = topLeftX;
+                this.topLeftY = topLeftY;
+                this.width = width;
+                this.height = height;
+                this.speed = speed;
+                this.direction = "right";
+            }
+
+            changeDirection() {
+                if (this.topLeftX + this.width >= canvas.width) {
+                    this.direction = "left";
+                }
+                if (this.topLeftX <= 0) {
+                    this.direction = "right";
+                }
+            }
+
+            update() {
+                this.changeDirection();
+
+                if (this.direction === "right") {
+                    this.topLeftX += this.speed;
+                } else if (this.direction === "left") {
+                    this.topLeftX -= this.speed;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = "orange";
+                ctx.fillRect(this.topLeftX, this.topLeftY, this.width, this.height);
+            }
+        }
+
+        const myRect = new Rectangle(0, 0, 300, 300, 10);
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            myRect.draw();
+            myRect.update();
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
