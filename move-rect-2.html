@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #333333;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #000;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const character = {
+            topLeftX: 100,
+            topLeftY: 100,
+            width: 50,
+            height: 50,
+            speed: 10,
+            color: "orange"
+        };
+
+        let inputs = {
+            left: false,
+            right: false,
+            up: false,
+            down: false,
+        };
+
+        const keys = {
+            a: "left",
+            d: "right",
+            w: "up",
+            s: "down"
+        };
+
+        document.addEventListener("keydown", (e) => {
+            let currKey = e.key;
+            if (keys[currKey]) {
+                inputs[keys[currKey]] = true;
+            }
+        });
+
+        document.addEventListener("keyup", (e) => {
+            let currKey = e.key;
+            if (keys[currKey]) {
+                inputs[keys[currKey]] = false;
+            }
+        });
+
+        function update() {
+            if (inputs.left) {
+                character.topLeftX -= character.speed;
+            }
+            if (inputs.right) {
+                character.topLeftX += character.speed;
+            }
+            if (inputs.up) {
+                character.topLeftY -= character.speed;
+            }
+            if (inputs.down) {
+                character.topLeftY += character.speed;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = character.color;
+            ctx.fillRect(character.topLeftX, character.topLeftY, character.width, character.height);
+        }
+
+        function animate() {
+            update();
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
